@@ -1,0 +1,72 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+defaultTasks 'clean', 'build', 'cucumber'
+
+repositories {
+    mavenCentral()
+}
+
+jar.manifest {
+    attributes('Main-Class': 'de.itagile.golf.Main')
+}
+
+sourceSets {
+    test {
+        java {
+            srcDirs = ['src/unittests/java','src/cucumber/java']
+        }
+        resources {
+            srcDirs = ['src/cucumber/resources']
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+    exclude '**/AllFeatures.class'
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
+    testImplementation 'org.hamcrest:hamcrest-library:2.2'
+    
+    // Eclipse Workaround. Eclipse needs an old junit Version.
+    testRuntimeOnly 'junit:junit:4.13.2'
+    
+    testImplementation 'org.mockito:mockito-core:5.+'
+            
+    testImplementation 'io.cucumber:cucumber-java:7.11.+'
+    testImplementation 'io.cucumber:cucumber-picocontainer:7.11.+'
+    
+    
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+}
+
+task cucumber() {
+    dependsOn assemble, test
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = [
+              '--plugin', 'pretty',
+              '--plugin', 'html:build/reports/tests/cucumber-report.html', 
+              '--glue', 'de.itagile.golf',
+              '--tags', 'not @in_arbeit', 
+              'src/cucumber/resources'
+              ]
+        }
+    }
+}
+
+
+mainClassName = 'de.itagile.golf.Main'
+
