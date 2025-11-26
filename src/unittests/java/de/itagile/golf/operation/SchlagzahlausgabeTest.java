@@ -21,7 +21,19 @@ class SchlagzahlausgabeTest {
 		when(scorecard.anzahlSchlaege()).thenReturn(1);
 		assertThat(schlagzahlausgabe.fuehreAus(scorecard), containsString("1 Schlag"));
 	}
-	
+
+	@Test
+	void meldetMehrereSchlaege() {
+		when(scorecard.anzahlSchlaege()).thenReturn(2);
+		assertThat(schlagzahlausgabe.fuehreAus(scorecard), containsString("2 Schläge"));
+	}
+
+	@Test
+	void meldetNullSchlaege() {
+		when(scorecard.anzahlSchlaege()).thenReturn(0);
+		assertThat(schlagzahlausgabe.fuehreAus(scorecard), containsString("0 Schläge"));
+	}
+
 	@Test
 	void integriertAusgabeDerFolgeoperation() {
 		when(folgeoperation.fuehreAus(scorecard)).thenReturn("folgeausgabe");
