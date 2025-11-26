@@ -29,7 +29,7 @@ class HilfeTest {
 	@Test
 	void gibtProKommandoEineZeileAus() {
 		String hilfetextFuerZweiBefehle = hilfetext(mock(Befehl.class), mock(Befehl.class));
-		assertThat(anzahlZeilen(hilfetextFuerZweiBefehle), is(2));
+		assertThat(anzahlZeilen(hilfetextFuerZweiBefehle), is(3));
 	}
 
 	private int anzahlZeilen(String string) {

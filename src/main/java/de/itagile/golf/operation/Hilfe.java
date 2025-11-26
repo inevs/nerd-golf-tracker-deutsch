@@ -18,7 +18,7 @@ public class Hilfe implements Operation {
 
 	@Override
 	public String fuehreAus(Scorecard scorecard) {
-		return "Ich reagiere auf: "
+		return "Ich reagiere auf:\n"
 				+ sammler.sammle().stream().map(this::hilfeZeileFuer).collect(joining(SystemProperties.LINE_SEPARATOR));
 	}
 
